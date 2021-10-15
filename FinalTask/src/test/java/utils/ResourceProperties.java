@@ -7,23 +7,33 @@ import java.util.Properties;
 
 public class ResourceProperties {
     private static FileInputStream fileConfigInputStream;
+    private static FileInputStream fileTestDataInputStream;
+    private static Properties CONF_PROPERTIES;
     private static Properties DATA_PROPERTIES;
 
     static {
         try {
-            fileConfigInputStream = new FileInputStream("src/test/resources/testData.properties");
+            fileConfigInputStream = new FileInputStream("src/test/resources/credentials.properties");
+            fileTestDataInputStream = new FileInputStream("src/test/resources/testData.properties");
+            CONF_PROPERTIES = new Properties();
             DATA_PROPERTIES = new Properties();
-            DATA_PROPERTIES.load(fileConfigInputStream);
+            CONF_PROPERTIES.load(fileConfigInputStream);
+            DATA_PROPERTIES.load(fileTestDataInputStream);
         } catch (IOException e) {
             throw new UnsupportedOperationException(e);
         } finally {
-            if (Objects.nonNull(fileConfigInputStream))
+            if (Objects.nonNull(fileConfigInputStream) && Objects.nonNull(fileTestDataInputStream))
                 try {
                     fileConfigInputStream.close();
+                    fileTestDataInputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
         }
+    }
+
+    public static String getCredProperty(String key) {
+        return CONF_PROPERTIES.getProperty(key);
     }
 
     public static String getDataProperty(String key) {
