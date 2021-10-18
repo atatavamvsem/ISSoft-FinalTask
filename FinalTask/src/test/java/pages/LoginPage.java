@@ -3,15 +3,22 @@ package pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginPage extends BasePage{
     @FindBy(xpath = "//input[@id='email_create']")
-    private static WebElement emailInput;
+    private static WebElement emailCreateInput;
+
+    @FindBy(xpath = "//input[@id='email']")
+    private static WebElement emailLoginInput;
+
+    @FindBy(xpath = "//input[@id='passwd']")
+    private static WebElement passwordInput;
 
     @FindBy(xpath = "//button[@id='SubmitCreate']")
     private static WebElement createAccountButton;
+
+    @FindBy(xpath = "//button[@id='SubmitLogin']")
+    private static WebElement loginButton;
 
     public LoginPage() {
         if (!"Login - My Store".equalsIgnoreCase(super.driver.getTitle())) {
@@ -21,9 +28,17 @@ public class LoginPage extends BasePage{
     }
 
     public CreateAccountPage createAccount(String email) {
-        emailInput.sendKeys(email);
+        emailCreateInput.sendKeys(email);
         createAccountButton.click();
 
         return new CreateAccountPage();
+    }
+
+    public AccountPage loginUser(String email, String password) {
+        emailLoginInput.sendKeys(email);
+        passwordInput.sendKeys(password);
+        loginButton.click();
+
+        return new AccountPage();
     }
 }

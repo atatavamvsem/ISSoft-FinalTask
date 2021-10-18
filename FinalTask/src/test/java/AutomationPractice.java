@@ -6,7 +6,8 @@ import pages.AccountPage;
 import pages.CreateAccountPage;
 import pages.LoginPage;
 import utils.GenerateRandomUtil;
-import utils.ResourceProperties;
+import utils.JsonParser;
+import utils.User;
 
 public class AutomationPractice {
     private LoginPage loginPage;
@@ -17,6 +18,9 @@ public class AutomationPractice {
     private String password;
     private String firstName;
     private String lastName;
+
+    private static User[] users;
+    private static JsonParser parser;
 
     @Test
     public void loginTest() {
@@ -32,7 +36,7 @@ public class AutomationPractice {
 
         accountPage = createAccountPage.fillAccountInfo(password, firstName, lastName);
 
-        Assertions.assertTrue(accountPage.print(firstName, lastName), "Creating account is failed");
+        Assertions.assertTrue(accountPage.checkLoggedUser(firstName, lastName), "Creating account is failed");
     }
 
     @AfterAll
