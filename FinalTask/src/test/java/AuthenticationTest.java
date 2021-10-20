@@ -1,5 +1,7 @@
 import drivers.WebDriverManager;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import pages.AccountPage;
 import pages.CreateAccountPage;
 import pages.LoginPage;
@@ -14,6 +16,8 @@ import utils.User;
 import static utils.GenerateRandomUtil.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Feature("Yandex tests")
+@ExtendWith(AttachmentExtension.class)
 public class AuthenticationTest {
     private LoginPage loginPage;
     private CreateAccountPage createAccountPage;
@@ -31,7 +35,7 @@ public class AuthenticationTest {
     public void createAccountTest() {
         loginPage = new LoginPage();
 
-        createAccountPage = loginPage.createAccount(user.getEmail());
+        createAccountPage = loginPage.createAccount("1");
 
         accountPage = createAccountPage.fillAccountInfo(user.getPassword(), user.getFirstName(), user.getLastName());
 

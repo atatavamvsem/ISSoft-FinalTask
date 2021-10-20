@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -33,6 +34,7 @@ public class WomenClothesPage extends BasePage {
 
         for (int position : positionsClothes) {
             Actions actions = new Actions(driver);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(By.xpath(String.format("(//div[@class='product-container'])[%s]", position + 1))));
             actions.moveToElement(driver.findElement(By.xpath(String.format("(//div[@class='product-container'])[%s]", position + 1))));
             actions.perform();
 

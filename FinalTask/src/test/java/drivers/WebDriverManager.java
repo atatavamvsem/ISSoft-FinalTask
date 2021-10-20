@@ -5,11 +5,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import utils.ResourceProperties;
 
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class WebDriverManager {
     private static WebDriverManager instance;
@@ -27,16 +32,33 @@ public class WebDriverManager {
     }
 
     public static WebDriver getDriver() {
-        if (driver == null) {
-            switch (ResourceProperties.getDataProperty("typeBrowser")) {
-                case "firefox":
-                    driver = createFirefoxDriver();
+        if (Objects.isNull(driver)) {
+            switch (ResourceProperties.getDataProperty("run")) {
+                case "local":
+                    driver = runLocal();
                     break;
-                default:
-                    driver = createChromeDriver();
+                case "docker":
+                    driver = runDocker();
+                    break;
             }
+            driver.manage().window().maximize();
         }
-        driver.manage().window().maximize();
+        return driver;
+    }
+
+    private static WebDriver runLocal() {
+        return new ChromeDriver();
+    }
+
+    private static WebDriver runDocker() {
+        try {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            driver = new RemoteWebDriver(new URL("http://localhost:4445/wd/hub"), options);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return driver;
     }
 

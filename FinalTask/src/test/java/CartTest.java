@@ -30,7 +30,7 @@ public class CartTest {
 
     @ParameterizedTest
     @MethodSource("usersProvider")
-    public void loginTest1(User user) {
+    public void addingProductToCartTest(User user) {
         loginPage = new LoginPage();
 
         accountPage = loginPage.loginUser(user.getEmail(), user.getPassword());
@@ -40,7 +40,7 @@ public class CartTest {
 
         cartPage = womenClothesPage.getCartPage();
 
-        Assertions.assertEquals(totalPrice, cartPage.getTotalPrice());
+        Assertions.assertTrue(totalPrice.compareTo(cartPage.getTotalPrice()) == 0, "Total Price is wrong");
     }
 
     @AfterEach
