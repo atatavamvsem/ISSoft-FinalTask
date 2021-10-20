@@ -15,6 +15,9 @@ public class BasePage {
     @FindBy(xpath = "//div[@id='block_top_menu']//a[@title='Women']")
     private static WebElement womenMenu;
 
+    @FindBy(xpath = "//a[@class='logout']")
+    private static WebElement logoutButton;
+
     public BasePage() {
         this.driver = WebDriverManager.getInstance().getDriver();
         PageFactory.initElements(driver, this);
@@ -23,14 +26,19 @@ public class BasePage {
     protected boolean isElementDisplayed(WebElement element) {
         try {
             return element.isDisplayed();
-        } catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             return false;
         }
     }
 
-    public WomenClothesPage getWomenClothesPage(){
+    public WomenClothesPage getWomenClothesPage() {
         new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(womenMenu)).click();
+
         return new WomenClothesPage();
+    }
+
+    public void logout() {
+        logoutButton.click();
     }
 
     protected String getTextElement(WebElement element) {

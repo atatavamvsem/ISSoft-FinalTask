@@ -12,9 +12,7 @@ import utils.GenerateRandomUtil;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class WomenClothesPage extends BasePage{
-    @FindBy(xpath = "//a[@class='fancybox-item fancybox-close']")
-    private static WebElement close;
+public class WomenClothesPage extends BasePage {
 
     @FindBy(xpath = "//a[@title='View my shopping cart']")
     private static WebElement cartButton;
@@ -29,32 +27,25 @@ public class WomenClothesPage extends BasePage{
         PageFactory.initElements(driver, this);
     }
 
-    public BigDecimal addClothesToCart() {
-        BigDecimal totalPrice = new BigDecimal("0.0");
-        BigDecimal clothPrice = new BigDecimal(0);
-        int[] random = GenerateRandomUtil.getArrayWithRandomInt(allClothes.size()-1, 3);
-        for (int element:random) {
+    public BigDecimal addClothesToCart(int numberClothes) {
+        BigDecimal totalPrice = new BigDecimal(0);
+        int[] positionsClothes = GenerateRandomUtil.getArrayWithRandomInt(allClothes.size() - 1, numberClothes);
+
+        for (int position : positionsClothes) {
             Actions actions = new Actions(driver);
-            actions.moveToElement(driver.findElement(By.xpath(String.format("(//div[@class='product-container'])[%s]",element+1))));
+            actions.moveToElement(driver.findElement(By.xpath(String.format("(//div[@class='product-container'])[%s]", position + 1))));
             actions.perform();
-            //new WebDriverWait(driver, 30).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath(String.format("(//div[@class='product-container'])[%s]",element+1))))).click();
 
-            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(String.format("(//a[@title='Add to cart'])[%s]",element+1))))).click();
-
-            String g = driver.findElement(By.xpath(String.format("(//div[@class='product-image-container']//span[@itemprop='price'])[%s]",element+1))).getText().replaceAll("[\\$]", "");
-
-            System.out.println(g);
-            //totalPrice = BigDecimal.valueOf(Double.parseDouble(g));
-            System.out.println(totalPrice);
-            totalPrice = totalPrice.add(BigDecimal.valueOf(Double.parseDouble(g)));
-            System.out.println(totalPrice);
-            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//span[@title='Close window']")))).click();
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath(String.format("(//a[@title='Add to cart'])[%s]", position + 1))))).click();
+            totalPrice = totalPrice.add(BigDecimal.valueOf(Double.parseDouble(driver.findElement(By.xpath(String.format("(//div[@class='product-image-container']//span[@itemprop='price'])[%s]", position + 1))).getText().replaceAll("[\\$]", ""))));
+            new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(closeButton)).click();
         }
         return totalPrice;
     }
 
-    public CartPage getCartPage(){
+    public CartPage getCartPage() {
         cartButton.click();
+
         return new CartPage();
     }
 }

@@ -1,5 +1,6 @@
 import drivers.WebDriverManager;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -8,6 +9,7 @@ import pages.LoginPage;
 import pages.ProductPage;
 import pages.WishlistPage;
 import utils.JsonParser;
+import utils.ResourceProperties;
 import utils.User;
 
 import java.io.File;
@@ -30,26 +32,24 @@ public class WishListTest {
 
     @ParameterizedTest
     @MethodSource("usersProvider")
-    public void loginTest(User user) {
+    public void autoWishlistTest(User user) {
         loginPage = new LoginPage();
 
         accountPage = loginPage.loginUser(user.getEmail(), user.getPassword());
 
         wishlistPage = accountPage.goWishlistPage();
-
         Assertions.assertFalse(wishlistPage.wishlistBlockIsPresent(), "Wishlist isn't empty");
 
         productPage = wishlistPage.goProductPage();
-
         String productName = productPage.addToWishlist();
 
         wishlistPage = new WishlistPage();
-        Assertions.assertTrue(wishlistPage.productIsPresentInWishlist("My wishlist", productName), "Wrong product in wishlist");
+        Assertions.assertTrue(wishlistPage.productIsPresentInWishlist(ResourceProperties.getDataProperty("autoWishlistName"), productName), "Wrong product in wishlist");
     }
 
     @ParameterizedTest
     @MethodSource("usersProvider")
-    public void loginTest1(User user) {
+    public void createdWishlistTest(User user) {
         loginPage = new LoginPage();
 
         accountPage = loginPage.loginUser(user.getEmail(), user.getPassword());
@@ -61,7 +61,13 @@ public class WishListTest {
         String productName = productPage.addToWishlist();
 
         wishlistPage = new WishlistPage();
-        Assertions.assertTrue(wishlistPage.productIsPresentInWishlist(wishlistName, productName), "Wishlist isn't empty");
+        Assertions.assertTrue(wishlistPage.productIsPresentInWishlist(wishlistName, productName), "Wrong product in wishlist");
+    }
+
+    @AfterEach
+    public void deleteWishlist(){
+        wishlistPage.deleteWishlist();
+        wishlistPage.logout();
     }
 
     @AfterAll

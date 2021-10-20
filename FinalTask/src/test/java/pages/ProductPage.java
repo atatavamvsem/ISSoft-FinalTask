@@ -6,7 +6,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class ProductPage extends BasePage{
+public class ProductPage extends BasePage {
     @FindBy(xpath = "//a[@id='wishlist_button']")
     private static WebElement addWishlistButton;
 
@@ -14,7 +14,7 @@ public class ProductPage extends BasePage{
     private static WebElement productName;
 
     @FindBy(xpath = "//a[@class='fancybox-item fancybox-close']")
-    private static WebElement close;
+    private static WebElement closeButton;
 
     public ProductPage() {
         PageFactory.initElements(driver, this);
@@ -22,7 +22,8 @@ public class ProductPage extends BasePage{
 
     public String addToWishlist() {
         addWishlistButton.click();
-        new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(close)).click();
+        new WebDriverWait(driver, 30).until(ExpectedConditions.elementToBeClickable(closeButton)).click();
+
         return productName.getText();
     }
 }

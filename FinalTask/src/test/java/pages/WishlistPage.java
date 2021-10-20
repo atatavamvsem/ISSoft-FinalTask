@@ -8,8 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.GenerateRandomUtil;
 
-public class WishlistPage extends BasePage{
-
+public class WishlistPage extends BasePage {
     @FindBy(xpath = "//div[@id='block-history']")
     private static WebElement wishListBlock;
 
@@ -24,6 +23,9 @@ public class WishlistPage extends BasePage{
 
     @FindBy(xpath = "//button[@id='submitWishlist']")
     private static WebElement submitWishlistButton;
+
+    @FindBy(xpath = "//td[@class='wishlist_delete']//a")
+    private static WebElement deleteWishlistButton;
 
     public WishlistPage() {
         if (!"My Store".equalsIgnoreCase(driver.getTitle())) {
@@ -56,5 +58,10 @@ public class WishlistPage extends BasePage{
 
     public boolean wishlistBlockIsPresent() {
         return isElementDisplayed(wishListBlock);
+    }
+
+    public void deleteWishlist() {
+        deleteWishlistButton.click();
+        driver.switchTo().alert().accept();
     }
 }

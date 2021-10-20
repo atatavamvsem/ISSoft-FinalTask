@@ -69,7 +69,7 @@ public class CreateAccountPage extends BasePage {
         cityInput.sendKeys(generateRandomString(lengthString));
 
         Select countrySlct = new Select(countrySelect);
-        countrySlct.selectByValue("21");
+        countrySlct.selectByValue(ResourceProperties.getDataProperty("countryValue"));
 
         Select stateSlct = new Select(stateSelect);
         stateSlct.selectByValue(String.valueOf(GenerateRandomUtil.generateRandomInt(stateSlct.getOptions().size())));
