@@ -1,7 +1,11 @@
 import drivers.WebDriverManager;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Feature;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import pages.AccountPage;
 import pages.CreateAccountPage;
 import pages.LoginPage;
@@ -16,7 +20,7 @@ import utils.User;
 import static utils.GenerateRandomUtil.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Feature("Yandex tests")
+@Feature("Authentication Test")
 @ExtendWith(AttachmentExtension.class)
 public class AuthenticationTest {
     private LoginPage loginPage;
@@ -26,16 +30,17 @@ public class AuthenticationTest {
     private static User user;
 
     @BeforeAll
-    public static void createUser(){
+    public static void createUser() {
         user = new User(String.format("%s@%s.com", generateRandomString(5), generateRandomString(5)), generateRandomString(5), generateRandomString(5), generateRandomString(5));
     }
 
     @Test
+    @DisplayName("Creating account test")
     @Order(1)
     public void createAccountTest() {
         loginPage = new LoginPage();
 
-        createAccountPage = loginPage.createAccount("1");
+        createAccountPage = loginPage.createAccount(user.getEmail());
 
         accountPage = createAccountPage.fillAccountInfo(user.getPassword(), user.getFirstName(), user.getLastName());
 
@@ -43,6 +48,7 @@ public class AuthenticationTest {
     }
 
     @Test
+    @DisplayName("Login to account test")
     @Order(2)
     public void loginTest() {
         loginPage = new LoginPage();
@@ -53,7 +59,7 @@ public class AuthenticationTest {
     }
 
     @AfterEach
-    public void logout(){
+    public void logout() {
         accountPage.logout();
     }
 

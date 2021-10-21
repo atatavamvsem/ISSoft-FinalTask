@@ -1,7 +1,9 @@
 import drivers.WebDriverManager;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pages.AccountPage;
@@ -15,6 +17,8 @@ import utils.User;
 import java.io.File;
 import java.util.stream.Stream;
 
+@Feature("Wishlist Test")
+@ExtendWith(AttachmentExtension.class)
 public class WishListTest {
     private LoginPage loginPage;
     private AccountPage accountPage;
@@ -65,7 +69,7 @@ public class WishListTest {
     }
 
     @AfterEach
-    public void deleteWishlist(){
+    public void deleteWishlist() {
         wishlistPage.deleteWishlist();
         wishlistPage.logout();
     }

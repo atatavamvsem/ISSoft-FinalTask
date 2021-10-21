@@ -1,7 +1,9 @@
 import drivers.WebDriverManager;
+import io.qameta.allure.Feature;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pages.*;
@@ -13,6 +15,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
+@Feature("Cart Test")
+@ExtendWith(AttachmentExtension.class)
 public class CartTest {
     private LoginPage loginPage;
     private AccountPage accountPage;
@@ -44,7 +48,7 @@ public class CartTest {
     }
 
     @AfterEach
-    public void cleanup(){
+    public void cleanup() {
         cartPage.deleteCart();
         cartPage.logout();
     }
